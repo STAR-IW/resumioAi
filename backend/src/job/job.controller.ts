@@ -9,10 +9,10 @@ constructor(private readonly jobService: JobService) {}
 
     @Post('scrape')
     scrape(@Body() scapeJobDto:ScrapeJobDto){
-        return scapeJobDto.url;
+        return this.jobService.scrapJob(scapeJobDto);
     }
     @Post('paste')
     paste(@Body() pasteJobDto:PasteJobDto){
-        return pasteJobDto.text;
+        return this.jobService.pasteJob(pasteJobDto);
     }
 }
