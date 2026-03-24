@@ -15,8 +15,10 @@ export class LlmService {
         const response = await this.ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
+            //TODO change/delete config if getting unexpected behavior from llm
+            //for more precise, deterministic, factual
+            config:{temperature : 0.2}
         });
-        // console.log(response.text);
         return response.text;
     }
 }
