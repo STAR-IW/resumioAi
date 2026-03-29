@@ -36,7 +36,8 @@ export default function Analyze(){
     }
 
     return (
-        <div className='grid grid-cols-2 gap-8'>
+        <div className='container mx-auto p-8 min-h-screen'>
+            <div className="grid grid-cols-2 gap-8">
             {/*Left col*/}
             <div className="flex flex-col gap-4">
                 <FileUpload onUpload={(cvText : string)=>{ console.log('cvText:', cvText); setCvText(cvText); }}></FileUpload>
@@ -49,6 +50,7 @@ export default function Analyze(){
             {/*Right col*/}
             <div>
                 {analyzeResult && <ResultsPanel {...analyzeResult}/>}
+            </div>
             </div>
         </div>
         )
