@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Sse} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Sse} from '@nestjs/common';
 import {AnalyzeDto} from "./dto/analyze.dto";
 import {AnalyzeService} from "./analyze.service";
 import {from, Observable} from "rxjs";
@@ -15,9 +15,10 @@ export class AnalyzeController {
         return this.analyzeService.analyzeData(analyzeDto);
     }
     //stream llm result to client
-    @Sse('stream')
-    @Post('stream')
-    stream(@Body() analyzeDto: AnalyzeDto): Observable<MessageEvent>{
-        return from(this.analyzeService.streamCoverLetter(analyzeDto))
+    @Sse('stream/:sessionId')
+    @Get('stream/:sessionId')
+    stream(@Param('sessionId') sessionId: string): Observable<MessageEvent> {
+        return from(this.analyzeService.streamCoverLetter(sessionId))
     }
+
 }

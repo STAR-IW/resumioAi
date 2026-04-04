@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {AnalyzeDto} from "./dto/analyze.dto";
 import {ConfigService} from "@nestjs/config";
 import {LlmService} from "../llm/llm.service";
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AnalyzeService {
@@ -9,21 +10,31 @@ export class AnalyzeService {
     constructor(private configService: ConfigService, private llmService : LlmService) {
 
     }
+    private sessions = new Map<string, string>();
 
     async analyzeData(analyzeDto: AnalyzeDto) {
+
+        const sessionId : string = uuidv4();
+
         const prompt = this.buildPrompt(analyzeDto.cvText, analyzeDto.jobDescription);
+        const coverLetterPrompt = this.coverLetterPromptBuild(analyzeDto.cvText, analyzeDto.jobDescription);
+
+        this.sessions.set(sessionId, coverLetterPrompt);
         const llmResponse :string = await this.llmService.generateAiContent(prompt)
         const cleanText = llmResponse.replace(/```json|```/g, '').trim();
 
-        return JSON.parse(cleanText);
+        const response = JSON.parse(cleanText);
+        return {sessionId, response}
     }
 
-    async *streamCoverLetter(analyzeDto: AnalyzeDto){
-        const prompt = this.coverLetterPromptBuild(analyzeDto.cvText, analyzeDto.jobDescription);
+    async *streamCoverLetter(sessionId: string){
+        const prompt  = this.sessions.get(sessionId);
+        if (!prompt) throw new NotFoundException('Session not found')
          //iterate over stream of response
         for await (const chunk of this.llmService.streamAiContent(prompt)){
            yield {data:chunk}
         }
+        this.sessions.delete(sessionId);
     }
     private buildPrompt(cvText: string, jobDescription: string): string {
         return `
@@ -61,7 +72,6 @@ export class AnalyzeService {
         {
           "matchScore": <0-100>,
           "missingSkills": ["skill1", "skill2"],
-          "coverLetter": "...",
           "interviewQuestions": [
             { "question": "...", "suggestedAnswer": "..." },
             { "question": "...", "suggestedAnswer": "..." },
