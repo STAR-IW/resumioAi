@@ -1,6 +1,7 @@
 'use client'
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
+import {Card, CardAction, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 export interface IJobInput {
     onJobInput: (text:string) => void;
 }
@@ -38,13 +39,24 @@ export default function JobInput({onJobInput} : IJobInput){
 
     return (
         <div>
-            <Button onClick={modeChange}>{mode === 'url' ? 'paste job description' : 'add url'}</Button>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            {mode === 'url' ?
-                    (<input type="url" value={inputValue} onChange={e => {setInputValue(e.target.value); setError('')}}/>
-                ) :
-                (<textarea value={inputValue} onChange={e => {setInputValue(e.target.value); setError('')}} placeholder="Paste job description here"/>)}
-            <Button onClick={handleFetch}>Fetch data</Button>
+            <Card className="p-8">
+                <CardHeader>
+                    <CardTitle>Add job description</CardTitle>
+                    <CardDescription></CardDescription>
+                </CardHeader>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {mode === 'url' ?
+                    (<input className='w-full p-2 rounded-md bg-background border border-border text-foreground'  type="url" value={inputValue} placeholder="Add URL here" onChange={e => {setInputValue(e.target.value); setError('')}}/>
+                    ) :
+                    (<textarea className='w-full p-2 rounded-md bg-background border border-border text-foreground h-32' value={inputValue} onChange={e => {setInputValue(e.target.value); setError('')}} placeholder="Paste job description here"/>)}
+               <div className= 'flex gap-2'>
+                   <Button onClick={modeChange}>{mode === 'url' ? 'Paste job description instead' : 'Add url instead'}</Button>
+                   <Button onClick={handleFetch}>Fetch data</Button>
+               </div>
+
+            </Card>
+
         </div>
     )
 }
+
