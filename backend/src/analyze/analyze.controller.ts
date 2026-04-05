@@ -9,7 +9,10 @@ import { MessageEvent } from '@nestjs/common'
 export class AnalyzeController {
     constructor(private readonly analyzeService: AnalyzeService) {
     }
-
+    @Post('/prepare')
+    prepare(@Body() analyzeDto: AnalyzeDto) {
+        return this.analyzeService.prepare(analyzeDto);
+    }
     @Post()
     analyze(@Body() analyzeDto: AnalyzeDto) {
         return this.analyzeService.analyzeData(analyzeDto);

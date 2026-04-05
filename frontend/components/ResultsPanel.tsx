@@ -7,10 +7,13 @@ import {useState} from "react";
 export type AnalysisResult = {
     matchScore : number
     missingSkills : string[]
-    coverLetter : string
     interviewQuestions : { question : string, suggestedAnswer: string}[]
 }
-export default function ResultsPanel({matchScore, missingSkills,coverLetter, interviewQuestions} : AnalysisResult) {
+
+interface ResultsPanelProps extends AnalysisResult {
+    coverLetter: string
+}
+export default function ResultsPanel({matchScore, missingSkills,coverLetter, interviewQuestions} : ResultsPanelProps) {
     //for button ui text update
     const [copied, setCopied] = useState<boolean>(false);
 
@@ -38,15 +41,15 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
                     <AccordionContent>
                         {missingSkills.map((s,i) =><Badge key={i}>{s}</Badge>)}
                     </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3">
+                </AccordionItem >
+                <AccordionItem  value="item-3" className="whitespace-pre-wrap">
                     <AccordionTrigger>Cover letter</AccordionTrigger>
                     <AccordionContent>
                         {coverLetter}
                         <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
                     </AccordionContent>
                 </AccordionItem>
-                <AccordionItem value="item-4">
+                <AccordionItem value="item-4" className="whitespace-pre-wrap">
                     <AccordionTrigger>Interview Questions</AccordionTrigger>
                     <AccordionContent>
                         {interviewQuestions.map((item, i) => (

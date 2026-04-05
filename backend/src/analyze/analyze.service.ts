@@ -10,21 +10,25 @@ export class AnalyzeService {
     constructor(private configService: ConfigService, private llmService : LlmService) {
 
     }
+    //temp to store the cover letter prompt between the two requests.(SSE only uses get)
     private sessions = new Map<string, string>();
 
+
+    async prepare(analyzeDto: AnalyzeDto){
+        const sessionId : string = uuidv4();
+        const coverLetterPrompt = this.coverLetterPromptBuild(analyzeDto.cvText, analyzeDto.jobDescription);
+        this.sessions.set(sessionId, coverLetterPrompt);
+        return {sessionId};
+
+    }
     async analyzeData(analyzeDto: AnalyzeDto) {
 
-        const sessionId : string = uuidv4();
-
         const prompt = this.buildPrompt(analyzeDto.cvText, analyzeDto.jobDescription);
-        const coverLetterPrompt = this.coverLetterPromptBuild(analyzeDto.cvText, analyzeDto.jobDescription);
-
-        this.sessions.set(sessionId, coverLetterPrompt);
         const llmResponse :string = await this.llmService.generateAiContent(prompt)
         const cleanText = llmResponse.replace(/```json|```/g, '').trim();
-
         const response = JSON.parse(cleanText);
-        return {sessionId, response}
+        return response;
+
     }
 
     async *streamCoverLetter(sessionId: string){
@@ -34,6 +38,7 @@ export class AnalyzeService {
         for await (const chunk of this.llmService.streamAiContent(prompt)){
            yield {data:chunk}
         }
+        yield { data: '[DONE]' }
         this.sessions.delete(sessionId);
     }
     private buildPrompt(cvText: string, jobDescription: string): string {
