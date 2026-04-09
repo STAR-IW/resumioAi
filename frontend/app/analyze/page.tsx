@@ -12,40 +12,32 @@ export default function Analyze(){
     const [jobInput, setJobInput] = useState<string>('');
     const [analyzeResult, setAnalyzeResult] = useState<AnalysisResult | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [sessionId, setSessionId] = useState<string>('');
+    const [showResults, setShowResults] = useState<boolean>(false);
     const [coverLetter, setCoverLetter] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
 
 
-    useEffect(() =>{
-        if(!sessionId){
-            return
-        }
-        const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/analyze/stream/${sessionId}`);
-        eventSource.onmessage = (event) => {
-            if (event.data === '[DONE]') {
-                eventSource.close()
-                return
-            }
-            setCoverLetter(prev => prev + event.data)
-        }
-
-        return () => {eventSource.close()}
-    },[sessionId])
-
     async function handleAnalyze( ){
+        setShowResults(false)
         setCoverLetter('')
-        setSessionId('')
         setError(null);
         setLoading(true);
         try{
+
+
             const resCoverLetter = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analyze/prepare`, {
                 method: "POST",
                 body: JSON.stringify({ cvText, jobDescription: jobInput }),
                 headers: { 'Content-Type': 'application/json' }
             });
             const { sessionId } = await resCoverLetter.json()
-            setSessionId(sessionId)
+
+            const es = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/analyze/stream/${sessionId}`)
+            es.onmessage = (event) => {
+                if (event.data === '[DONE]') { es.close(); return }
+                setCoverLetter(prev => prev + event.data)
+            }
+            setShowResults(true)
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/analyze`, {
                 method: "POST",
@@ -61,7 +53,7 @@ export default function Analyze(){
         }finally {
             setLoading(false);
         }
-
+        console.log('final coverLetter length:', coverLetter.length)
 
     }
 
@@ -79,7 +71,7 @@ export default function Analyze(){
             </div>
             {/*Right col*/}
             <div>
-                {sessionId && <ResultsPanel {...(analyzeResult ?? { matchScore: 0, missingSkills: [], interviewQuestions: [] })} coverLetter={coverLetter}/>}
+                {showResults  && <ResultsPanel {...(analyzeResult ?? { matchScore: 0, missingSkills: [], interviewQuestions: [] })} coverLetter={coverLetter}/>}
             </div>
             </div>
         </div>

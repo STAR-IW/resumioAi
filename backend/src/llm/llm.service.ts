@@ -13,7 +13,7 @@ export class LlmService {
 
     async generateAiContent(prompt: string) {
         const response = await this.ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             contents: prompt,
             //TODO change/delete config if getting unexpected behavior from llm
             //for more precise, deterministic, factual
@@ -24,7 +24,7 @@ export class LlmService {
 
     async *streamAiContent(prompt: string) {
         const response = await this.ai.models.generateContentStream({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             contents: prompt,
             //TODO change/delete config if getting unexpected behavior from llm
             //for more precise, deterministic, factual

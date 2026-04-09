@@ -1,8 +1,9 @@
 'use client'
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {useState} from "react";
+import {Card, CardTitle} from "@/components/ui/card";
+import {Progress} from "@/components/ui/progress";
 
 export type AnalysisResult = {
     matchScore : number
@@ -16,6 +17,10 @@ interface ResultsPanelProps extends AnalysisResult {
 export default function ResultsPanel({matchScore, missingSkills,coverLetter, interviewQuestions} : ResultsPanelProps) {
     //for button ui text update
     const [copied, setCopied] = useState<boolean>(false);
+    const [openScore, setOpenScore] = useState(true)
+    const [openSkills, setOpenSkills] = useState(true)
+    const [openCoverLetter, setOpenCoverLetter] = useState(true)
+    const [openQuestions, setOpenQuestions] = useState(true)
 
     const  handleCopy = async () =>{
         try{
@@ -28,39 +33,36 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
     }
 
     return (
-        <div>
-            <Accordion type="single" collapsible defaultValue="item-1">
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>Match score</AccordionTrigger>
-                    <AccordionContent>
-                        <Badge className={matchScore >=70 ? "bg-green-500 " : matchScore>= 40 ? "bg-yellow-500" : "bg-red-500"}>{matchScore}%</Badge>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                    <AccordionTrigger>Missing Skills</AccordionTrigger>
-                    <AccordionContent>
-                        {missingSkills.map((s,i) =><Badge key={i}>{s}</Badge>)}
-                    </AccordionContent>
-                </AccordionItem >
-                <AccordionItem  value="item-3" className="whitespace-pre-wrap">
-                    <AccordionTrigger>Cover letter</AccordionTrigger>
-                    <AccordionContent>
-                        {coverLetter}
-                        <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-4" className="whitespace-pre-wrap">
-                    <AccordionTrigger>Interview Questions</AccordionTrigger>
-                    <AccordionContent>
-                        {interviewQuestions.map((item, i) => (
-                            <div key={i}>
-                                <p className="font-semibold">{item.question}</p>
-                                <p className="text-muted-foreground mt-1">{item.suggestedAnswer}</p>
-                            </div>
-                        ))}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+        <div className="flex flex-col gap-2">
+            <Card>
+                <CardTitle className='p-1 m-2 text-lg'>Match Score</CardTitle>
+                <div className="flex items-center gap-4 m-2 ">
+                    <Progress value={matchScore}   className={`flex-1  ${matchScore >= 70 ? '[&>div]:bg-green-500' : matchScore >= 40 ? '[&>div]:bg-yellow-500' : '[&>div]:bg-red-500 '} `}
+                    />
+                    <span className="font-bold text-lg m-2">{matchScore}%</span>
+                </div>
+
+            </Card>
+            <Card>
+                <CardTitle>Missing Skills</CardTitle>
+                <div className="flex flex-wrap gap-2">
+                    {missingSkills.map((s,i) =><Badge key={i}>{s}</Badge>)}
+                </div>
+            </Card>
+            <Card>
+                <CardTitle>Cover Letter</CardTitle>
+                {coverLetter}
+                <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
+            </Card>
+            <Card>
+                <CardTitle>Interview Questions</CardTitle>
+                {interviewQuestions.map((item, i) => (
+                    <div key={i}>
+                        <p className="font-semibold">{item.question}</p>
+                        <p className="text-muted-foreground mt-1">{item.suggestedAnswer}</p>
+                    </div>
+                ))}
+            </Card>
         </div>
     )
 }
