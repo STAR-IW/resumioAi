@@ -21,7 +21,7 @@ export class LlmService {
         });
         return response.text;
     }
-
+    //for streaming cover letter response
     async *streamAiContent(prompt: string) {
         const response = await this.ai.models.generateContentStream({
             model: 'gemini-2.5-flash-lite',
