@@ -8,11 +8,24 @@ import { LlmModule } from './llm/llm.module';
 import { AnalyzeModule } from './analyze/analyze.module';
 import { AnalyzeService } from './analyze/analyze.service';
 import {LlmService} from "./llm/llm.service";
+import {ThrottlerGuard, ThrottlerModule} from "@nestjs/throttler";
+import {APP_GUARD} from "@nestjs/core";
 
 @Module({
 
-  imports: [ConfigModule.forRoot({ isGlobal: true }),UploadModule, JobModule, LlmModule, AnalyzeModule, ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }),UploadModule, JobModule, LlmModule, AnalyzeModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000, //60 second
+          limit: 10, //max 10 requests per IP per window
+        },
+      ],
+    }),],
   controllers: [AppController],
-  providers: [AppService, AnalyzeService,LlmService],
+  providers: [AppService,{
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard
+  }],
 })
 export class AppModule {}
