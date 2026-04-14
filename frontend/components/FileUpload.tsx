@@ -7,13 +7,14 @@ export interface FileUploadProps{
     onUpload: (text:string) => void,
 }
 export default function FileUpload({onUpload}: FileUploadProps ) {
-    const [file, setFile ] = useState<File | null>(null);
+    // const [file, setFile ] = useState<File | null>(null);
+    const [fileName, setFileName] = useState<string>("");
     const [uploaded, setUploaded] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
 
     //get dom element
     const inputRef = useRef<HTMLInputElement>(null);
-    const handleUpload = async() =>{
+    async function handleUpload(file : File | null) {
         // console.log("handleUpload triggered ");
         if(!file){
             return
@@ -50,9 +51,14 @@ export default function FileUpload({onUpload}: FileUploadProps ) {
                     type='file'
                     accept=".pdf,.docx"
                     className="hidden"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    // onChange={(e) => (setFile(e.target.files?.[0] || null))}
+                    onChange={async (e) => {
+                        await handleUpload(e.target.files?.[0] || null)
+                        setFileName(e.target.files?.[0]?.name ?? '')
+                    }}
+
                 />
-                <Button  disabled={uploaded} onClick={() => file? handleUpload() : inputRef.current?.click()}>{uploaded? '✅ CV Uploaded Successfully' : file? `Upload ${file.name}` : "Select CV"}</Button>
+                <Button  disabled={uploaded} onClick={() =>  inputRef.current?.click()}>{uploaded? `✅  ${fileName} Uploaded Successfully` : uploaded? `Upload ${uploaded}` : "Select CV"}</Button>
                 {error && <p className='text-red-500 text-sm'>{error}</p>}
             </Card>
         </div>
