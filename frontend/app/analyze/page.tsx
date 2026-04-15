@@ -12,7 +12,7 @@ export default function Analyze(){
     const [jobValue, setJobValue] = useState<string>('');
     const [analyzeResult, setAnalyzeResult] = useState<AnalysisResult | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [showResults, setShowResults] = useState<boolean>(false);
+    const [showResults, setShowResults] = useState<boolean>(true);
     const [coverLetter, setCoverLetter] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [jobMode, setJobMode] = useState<'url' | 'paste'>('url');
@@ -86,22 +86,31 @@ export default function Analyze(){
 
     }
     return (
-        <div className='container mx-auto p-8 min-h-screen'>
-            <div className="grid grid-cols-2 gap-8">
-            {/*Left col*/}
-            <div className="flex flex-col gap-4">
+        <div className=' container mx-auto  p-2   min-h-screen '>
+            <>
+            {/*Data input*/}
+                {! showResults && <div  className=" mx-auto  gap-4 max-w-[600px] ">
                 <FileUpload onUpload={(cvText : string)=>{  setCvText(cvText); }}></FileUpload>
                 <JobInput   onJobInput = {(mode, value) =>{ setJobMode(mode); setJobValue(value)} }></JobInput>
                 <Button onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
                     {loading && <Spinner data-icon="inline-start" />}
                 </Button>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-            </div>
-            {/*Right col*/}
-            <div>
+            </div>}
+            {/*Results*/}
+            <div className=" flex flex-col mx-auto  gap-4 max-w-[600px] ">
+                <div className="flex justify-end">
+                    {showResults && <Button className="m-3"  onClick={()=>{
+                        setShowResults(false);
+                        setAnalyzeResult(null);
+                        setCoverLetter('') ;
+                        setCvText('');
+                        setJobValue('');
+                    }}>Start again</Button>}
+                </div>
                 {showResults  && <ResultsPanel {...(analyzeResult ?? { matchScore: 0, missingSkills: [], interviewQuestions: [] })} coverLetter={coverLetter}/>}
             </div>
-            </div>
+            </>
         </div>
         )
 }

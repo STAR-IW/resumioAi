@@ -17,10 +17,7 @@ interface ResultsPanelProps extends AnalysisResult {
 export default function ResultsPanel({matchScore, missingSkills,coverLetter, interviewQuestions} : ResultsPanelProps) {
     //for button ui text update
     const [copied, setCopied] = useState<boolean>(false);
-    const [openScore, setOpenScore] = useState(true)
-    const [openSkills, setOpenSkills] = useState(true)
-    const [openCoverLetter, setOpenCoverLetter] = useState(true)
-    const [openQuestions, setOpenQuestions] = useState(true)
+
 
     const  handleCopy = async () =>{
         try{
@@ -34,7 +31,7 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
 
     return (
         <div className="flex flex-col gap-2">
-            <Card>
+            <Card className="p-4">
                 <CardTitle className='p-1 m-2 text-lg'>Match Score</CardTitle>
                 <div className="flex items-center gap-4 m-2 ">
                     <Progress value={matchScore}   className={`flex-1  ${matchScore >= 70 ? '[&>div]:bg-green-500' : matchScore >= 40 ? '[&>div]:bg-yellow-500' : '[&>div]:bg-red-500 '} `}
@@ -43,18 +40,18 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
                 </div>
 
             </Card>
-            <Card>
+            <Card className="p-4">
                 <CardTitle>Missing Skills</CardTitle>
                 <div className="flex flex-wrap gap-2">
                     {missingSkills.map((s,i) =><Badge key={i}>{s}</Badge>)}
                 </div>
             </Card>
-            <Card>
+            <Card className="p-4">
                 <CardTitle>Cover Letter</CardTitle>
                 {coverLetter}
                 <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
             </Card>
-            <Card>
+            <Card className="p-4">
                 <CardTitle>Interview Questions</CardTitle>
                 {interviewQuestions.map((item, i) => (
                     <div key={i}>
