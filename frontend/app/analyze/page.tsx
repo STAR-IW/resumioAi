@@ -1,7 +1,7 @@
 'use client'
 import FileUpload from "@/components/FileUpload";
 import JobInput from "@/components/JobInput";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Button} from "@/components/ui/button";
 import ResultsPanel from "@/components/ResultsPanel";
 import type {AnalysisResult} from "@/components/ResultsPanel"
@@ -12,7 +12,7 @@ export default function Analyze(){
     const [jobValue, setJobValue] = useState<string>('');
     const [analyzeResult, setAnalyzeResult] = useState<AnalysisResult | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [showResults, setShowResults] = useState<boolean>(true);
+    const [showResults, setShowResults] = useState<boolean>(false);
     const [coverLetter, setCoverLetter] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [jobMode, setJobMode] = useState<'url' | 'paste'>('url');
