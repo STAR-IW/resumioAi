@@ -1,6 +1,5 @@
 import {BadRequestException, Injectable} from '@nestjs/common';
 import {ScrapeJobDto} from "./dto/scrape-job.dto";
-import axios from "axios";
 import * as cheerio from 'cheerio';
 import {PasteJobDto} from "./dto/paste-job.dto";
 
@@ -16,8 +15,9 @@ export class JobService {
 
         try {
             //fetch the page HTML
-            const response = await axios.get(scrapeJobDto.url);
-            const $ = cheerio.load(response.data);
+            const response = await fetch(scrapeJobDto.url);
+            const html = await response.text();
+            const $ = cheerio.load(html);
             $('script, style, nav, footer, header, iframe,img').remove();
 
             return $('body').text().replace(/\s+/g, ' ').trim();
