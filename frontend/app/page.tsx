@@ -10,7 +10,7 @@ export default function Home() {
        <Card className="flex flex-col gap-4 text-center p-7 max-w-lg">
            <h1 className="text-4xl font-bold">Resumio</h1>
            <h2 className="text-xl text-muted-foreground">Analyze. Improve. Get Hired.</h2>
-           <Button asChild>
+           <Button data-testid= "try-it-now" asChild>
                <Link  href="/analyze">Try it now!</Link>
            </Button>
        </Card>

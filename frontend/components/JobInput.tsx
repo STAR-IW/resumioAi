@@ -21,9 +21,9 @@ export default function JobInput({onJobInput} : IJobInput){
                     <CardDescription></CardDescription>
                 </CardHeader>
                 {mode === 'url' ?
-                    (<input className='w-full p-2 rounded-md bg-background border border-border text-foreground'  type="url" value={inputValue} placeholder="Add URL here" onChange={e => {setInputValue(e.target.value); onJobInput(mode,e.target.value); }}/>
+                    (<input data-testid = "input-url" className='w-full p-2 rounded-md bg-background border border-border text-foreground'  type="url" value={inputValue} placeholder="Add URL here" onChange={e => {setInputValue(e.target.value); onJobInput(mode,e.target.value); }}/>
                     ) :
-                    (<textarea className='w-full p-2 rounded-md bg-background border border-border text-foreground h-32' value={inputValue} onChange={e => {setInputValue(e.target.value); onJobInput(mode,e.target.value); }} placeholder="Paste job description here"/>)}
+                    (<textarea data-testid = "input-job-description" className='w-full p-2 rounded-md bg-background border border-border text-foreground h-32' value={inputValue} onChange={e => {setInputValue(e.target.value); onJobInput(mode,e.target.value); }} placeholder="Paste job description here"/>)}
                <div className= 'flex gap-2'>
                    <Button onClick={modeChange}>{mode === 'url' ? 'Paste job description instead' : 'Add url instead'}</Button>
                </div>

@@ -92,7 +92,7 @@ export default function Analyze(){
                 {! showResults && <div  className=" mx-auto  gap-4 max-w-[600px] ">
                 <FileUpload onUpload={(cvText : string)=>{  setCvText(cvText); }}></FileUpload>
                 <JobInput   onJobInput = {(mode, value) =>{ setJobMode(mode); setJobValue(value)} }></JobInput>
-                <Button onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
+                <Button data-testid = "analyze-button" onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
                     {loading && <Spinner data-icon="inline-start" />}
                 </Button>
                 {error && <p className="text-red-500 text-sm">{error}</p>}

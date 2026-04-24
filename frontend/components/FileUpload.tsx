@@ -58,7 +58,7 @@ export default function FileUpload({onUpload}: FileUploadProps ) {
                     }}
 
                 />
-                <Button  disabled={uploaded} onClick={() =>  inputRef.current?.click()}>{uploaded? `✅  ${fileName} Uploaded Successfully` : uploaded? `Upload ${uploaded}` : "Select CV"}</Button>
+                <Button data-testid = "select-cv"  disabled={uploaded} onClick={() =>  inputRef.current?.click()}>{uploaded? `✅  ${fileName} Uploaded Successfully` : uploaded? `Upload ${uploaded}` : "Select CV"}</Button>
                 {error && <p className='text-red-500 text-sm'>{error}</p>}
             </Card>
         </div>
