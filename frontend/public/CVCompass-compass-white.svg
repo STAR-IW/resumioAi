@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 96" width="540" height="96" fill="none" role="img" aria-label="CVCompass">
+  <defs>
+    <linearGradient id="cvcCompassDotW" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5B5BE6"></stop>
+      <stop offset="100%" stop-color="#3FB5E0"></stop>
+    </linearGradient>
+  </defs>
+  <g>
+    <circle cx="48" cy="48" r="38" stroke="#FFFFFF" stroke-width="3" fill="none"></circle>
+    <path d="M48 18 L58 48 L48 48 Z" fill="url(#cvcCompassDotW)"></path>
+    <path d="M48 78 L38 48 L48 48 Z" fill="#FFFFFF"></path>
+    <circle cx="48" cy="48" r="2.5" fill="#FFFFFF"></circle>
+  </g>
+  <text x="116" y="68" font-family="Geist, Inter, -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, system-ui, sans-serif" font-weight="600" font-size="64" letter-spacing="-2.24" fill="#FFFFFF">CVCompass</text>
+</svg>

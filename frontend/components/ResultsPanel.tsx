@@ -1,7 +1,7 @@
 'use client'
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, CardTitle} from "@/components/ui/card";
 import {Progress} from "@/components/ui/progress";
 
@@ -18,12 +18,21 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
     //for button ui text update
     const [copied, setCopied] = useState<boolean>(false);
 
+    useEffect(() => {
+        if (!copied) return
+
+        const timer = setTimeout(() => {
+            setCopied(false)
+        }, 2000)
+
+        return () => clearTimeout(timer)
+    }, [copied])
 
     const  handleCopy = async () =>{
         try{
             await navigator.clipboard.writeText(coverLetter)
             setCopied(true);
-            setTimeout(()=>{setCopied(false)}, 2000);
+            // setTimeout(()=>{setCopied(false)}, 2000);
         }catch (error){
             console.log('Failed to copy',error);
         }
