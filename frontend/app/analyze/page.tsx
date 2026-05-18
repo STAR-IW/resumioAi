@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button";
 import ResultsPanel from "@/components/ResultsPanel";
 import type {AnalysisResult} from "@/components/ResultsPanel"
 import {Spinner} from "@/components/ui/spinner";
+import Navbar from "@/components/Navbar";
 
 export default function Analyze(){
     const [cvText, setCvText] = useState<string>('');
@@ -86,10 +87,17 @@ export default function Analyze(){
 
     }
     return (
+        <>
+            <Navbar/>
         <div className=' container mx-auto  p-2   min-h-screen '>
             <>
             {/*Data input*/}
                 {! showResults && <div  className=" mx-auto  gap-4 max-w-[600px] ">
+                    <h1 className="text-7xl font-bold ">Find your <span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+                match <br/> score.
+                </span></h1>
+                    <p className="pt-8  "> Drop in your CV and the job you desire. We'll score the fit, surface gaps, and draft what you need next.</p>
+
                 <FileUpload onUpload={(cvText : string)=>{  setCvText(cvText); }}></FileUpload>
                 <JobInput   onJobInput = {(mode, value) =>{ setJobMode(mode); setJobValue(value)} }></JobInput>
                 <Button data-testid = "analyze-button" onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
@@ -112,5 +120,7 @@ export default function Analyze(){
             </div>
             </>
         </div>
-        )
+        </>
+
+    )
 }

@@ -1,26 +1,44 @@
 import {Button} from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 
 import Link from "next/link";
+import Grainient from "@/components/Grainient";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
 
       <>
+    <div className="fixed inset-0 z-0">
+        <Grainient
+            color1="#1c1d3f"
+            color2="#392688"
+            color3="#7c3db8"
+            timeSpeed={0.25}
+            colorBalance={0}
+            warpStrength={1}
+            warpFrequency={4.8}
+            warpSpeed={2}
+            warpAmplitude={50}
+            blendAngle={5}
+            blendSoftness={0.17}
+            rotationAmount={500}
+            noiseScale={2}
+            grainAmount={0}
+            grainScale={0.2}
+            grainAnimated={false}
+            contrast={1.8}
+            gamma={1}
+            saturation={1.35}
+            centerX={0}
+            centerY={0.04}
+            zoom={1.2}
+        />
+    </div>
+          <Navbar/>
 
-      <nav className="flex items-center gap-3 px-6 py-4">
-          <Image
-              src="/CVCompass-compass-white.svg"
-              width={270}
-              height={48}
-              alt="logo"
-              className="w-[270px] h-[48px]"
-          />
-      </nav>
-
-    <div className="px-16 py-20">
+    <div className="px-16 py-20 relative z-10">
         <h1 className="text-7xl font-bold ">Know your <span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
   match <br/> score
 </span> before you<br/> apply.</h1>
