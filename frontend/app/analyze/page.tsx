@@ -51,8 +51,8 @@ export default function Analyze(){
             if(!res.ok){throw new Error(`Request failed. ${res.status}`);}
             const data = await res.json();
             setAnalyzeResult(data);
-        }catch(error){
-            setError('Analysis failed. Please try again ')
+        }catch(error : any){
+            setError(error.message || 'Analysis failed. Please try again ')
         }finally {
             setLoading(false);
         }
@@ -60,7 +60,7 @@ export default function Analyze(){
     async function fetchJobDescription(mode: 'url' | 'paste', value:string){
             const endpointUrl = '/job/scrape';
             const body = {url:value}
-            try{
+
                 if(mode === 'url'){
                     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpointUrl}`, {
                         method: "POST",
@@ -80,9 +80,7 @@ export default function Analyze(){
                 }
 
 
-            }catch(error : any){
-                setError(error.message ||'Network error, please try again later');
-            }
+
 
 
     }
@@ -94,21 +92,23 @@ export default function Analyze(){
             {/*Data input*/}
                 {! showResults && <div  className=" mx-auto  gap-4 max-w-[600px] ">
                     <h1 className="text-7xl font-bold ">Find your <span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
-                match <br/> score.
+                match score.
                 </span></h1>
                     <p className="pt-8  "> Drop in your CV and the job you desire. We'll score the fit, surface gaps, and draft what you need next.</p>
+                <div className="flex flex-col gap-4">
+                    <FileUpload onUpload={(cvText : string)=>{  setCvText(cvText); }}></FileUpload>
+                    <JobInput   onJobInput = {(mode, value) =>{ setJobMode(mode); setJobValue(value)} }></JobInput>
+                    <Button variant="outline" data-testid = "analyze-button" onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
+                        {loading && <Spinner data-icon="inline-start" />}
+                    </Button>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                </div>
 
-                <FileUpload onUpload={(cvText : string)=>{  setCvText(cvText); }}></FileUpload>
-                <JobInput   onJobInput = {(mode, value) =>{ setJobMode(mode); setJobValue(value)} }></JobInput>
-                <Button data-testid = "analyze-button" onClick={handleAnalyze} disabled={!cvText || !jobValue}>Analyze
-                    {loading && <Spinner data-icon="inline-start" />}
-                </Button>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
             </div>}
             {/*Results*/}
             <div className=" flex flex-col mx-auto  gap-4 max-w-[600px] ">
                 <div className="flex justify-end">
-                    {showResults && <Button className="m-3"  onClick={()=>{
+                    {showResults && <Button variant="outline" className="m-3"  onClick={()=>{
                         setShowResults(false);
                         setAnalyzeResult(null);
                         setCoverLetter('') ;
