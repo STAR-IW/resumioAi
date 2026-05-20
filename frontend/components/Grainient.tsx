@@ -154,7 +154,7 @@ const Grainient = ({
                        color2 = '#5227FF',
                        color3 = '#B497CF',
                        className = ''
-                   }) => {
+                   }: GrainientProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Effect 1: build WebGL context once, pause when offscreen / tab hidden
@@ -230,7 +230,7 @@ const Grainient = ({
         let isPageVisible = !document.hidden;
         const t0 = performance.now();
 
-        const loop = t => {
+        const loop = (t: number) => {
             program.uniforms.iTime.value = (t - t0) * 0.001;
             renderer.render({ scene: mesh });
             raf = requestAnimationFrame(loop);
@@ -244,7 +244,7 @@ const Grainient = ({
         };
 
         const io = new IntersectionObserver(
-            ([entry]) => { isVisible = entry.isIntersecting; isVisible ? tryStart() : tryStop(); },
+            ([entry]: IntersectionObserverEntry[]) => { isVisible = entry.isIntersecting; isVisible ? tryStart() : tryStop(); },
             { threshold: 0 }
         );
         io.observe(container);
