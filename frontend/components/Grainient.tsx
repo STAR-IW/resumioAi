@@ -105,7 +105,31 @@ void main(){
 // Keep renderer/program alive across re-renders so Effect 2 can update
 // uniforms without ever rebuilding the WebGL context.
 const ctxMap = new WeakMap();
-
+interface GrainientProps {
+    timeSpeed?: number;
+    colorBalance?: number;
+    warpStrength?: number;
+    warpFrequency?: number;
+    warpSpeed?: number;
+    warpAmplitude?: number;
+    blendAngle?: number;
+    blendSoftness?: number;
+    rotationAmount?: number;
+    noiseScale?: number;
+    grainAmount?: number;
+    grainScale?: number;
+    grainAnimated?: boolean;
+    contrast?: number;
+    gamma?: number;
+    saturation?: number;
+    centerX?: number;
+    centerY?: number;
+    zoom?: number;
+    color1?: string;
+    color2?: string;
+    color3?: string;
+    className?: string;
+}
 const Grainient = ({
                        timeSpeed = 0.25,
                        colorBalance = 0.0,
@@ -131,7 +155,7 @@ const Grainient = ({
                        color3 = '#B497CF',
                        className = ''
                    }) => {
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Effect 1: build WebGL context once, pause when offscreen / tab hidden
     useEffect(() => {
