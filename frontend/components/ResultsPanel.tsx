@@ -51,14 +51,14 @@ export default function ResultsPanel({matchScore, missingSkills,coverLetter, int
             </Card>
             <Card className="p-4">
                 <CardTitle>Missing Skills</CardTitle>
-                <div className="flex flex-wrap gap-2">
-                    {missingSkills.map((s,i) =><Badge key={i}>{s}</Badge>)}
+                <div className="flex flex-wrap gap-2 ">
+                    {missingSkills.map((s,i) =><Badge  className="border border-neutral-700 bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white aria-expanded:bg-neutral-800 aria-expanded:text-white" key={i}>{s}</Badge>)}
                 </div>
             </Card>
             <Card className="p-4">
                 <CardTitle>Cover Letter</CardTitle>
                 {coverLetter}
-                <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
+                <Button variant="outline" onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
             </Card>
             <Card className="p-4">
                 <CardTitle>Interview Questions</CardTitle>
