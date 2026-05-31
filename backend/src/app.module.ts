@@ -3,17 +3,23 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UploadModule } from './upload/upload.module';
 import { JobModule } from './job/job.module';
-import {ConfigModule} from "@nestjs/config";
+import {ConfigModule, ConfigService} from "@nestjs/config";
 import { LlmModule } from './llm/llm.module';
 import { AnalyzeModule } from './analyze/analyze.module';
-import { AnalyzeService } from './analyze/analyze.service';
-import {LlmService} from "./llm/llm.service";
 import {ThrottlerGuard, ThrottlerModule} from "@nestjs/throttler";
 import {APP_GUARD} from "@nestjs/core";
+import { MongooseModule } from '@nestjs/mongoose';
+import { HistoryModule } from './history/history.module';
+
 
 @Module({
 
-  imports: [ConfigModule.forRoot({ isGlobal: true }),UploadModule, JobModule, LlmModule, AnalyzeModule,
+  imports: [ConfigModule.forRoot({ isGlobal: true }),UploadModule, JobModule, LlmModule,HistoryModule, AnalyzeModule,MongooseModule.forRootAsync({
+    useFactory: (configService: ConfigService) => ({
+      uri: configService.get<string>('MONGODB_URI'),
+    }),
+    inject: [ConfigService],
+  }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -21,7 +27,8 @@ import {APP_GUARD} from "@nestjs/core";
           limit: 10, //max 10 requests per IP per window
         },
       ],
-    }),],
+    }),
+    HistoryModule,],
   controllers: [AppController],
   providers: [AppService,{
     provide: APP_GUARD,
