@@ -15,8 +15,8 @@ export class History extends Document {
     @Prop()
     coverLetter: string;
 
-    @Prop({ type: [String] })
-    interviewQuestions: string[];
+    @Prop({ type: [{ question: String, suggestedAnswer: String }] })
+    interviewQuestions: { question: string; suggestedAnswer: string }[];
 }
 
 export const HistorySchema = SchemaFactory.createForClass(History);

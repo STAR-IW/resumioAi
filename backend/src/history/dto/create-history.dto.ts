@@ -10,5 +10,4 @@ export class CreateHistoryDto{
     missingSkills: string[];
     @IsString()
     coverLetter: string;
-    interviewQuestions: string[];
-}
+    interviewQuestions: { question: string; suggestedAnswer: string }[];}

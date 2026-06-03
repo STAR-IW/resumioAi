@@ -37,8 +37,11 @@ export default function Analyze(){
             const { sessionId } = await resCoverLetter.json()
 
             const es = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/analyze/stream/${sessionId}`)
+
+            let coverLetterText = '';
             es.onmessage = (event) => {
                 if (event.data === '[DONE]') { es.close(); return }
+                coverLetterText += event.data;
                 setCoverLetter(prev => prev + event.data)
             }
             setShowResults(true)
@@ -51,6 +54,8 @@ export default function Analyze(){
             if(!res.ok){throw new Error(`Request failed. ${res.status}`);}
             const data = await res.json();
             setAnalyzeResult(data);
+
+            await saveToHistory(data, coverLetterText);
         }catch(error : any){
             setError(error.message || 'Analysis failed. Please try again ')
         }finally {
@@ -82,6 +87,17 @@ export default function Analyze(){
 
 
 
+
+    }
+
+    async function saveToHistory(data : AnalysisResult, coverLetter  : string){
+        const clientId = localStorage.getItem("clientId");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/history`,{
+            method: "POST",
+            body: JSON.stringify({ ...data,coverLetter , clientId }),
+            headers: { 'Content-Type': 'application/json' }
+        })
+        if(!res.ok){throw new Error(`Request failed. ${res.status}`);}
 
     }
     return (
