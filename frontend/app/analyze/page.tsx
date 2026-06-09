@@ -102,7 +102,7 @@ export default function Analyze(){
     }
     return (
         <>
-            <Navbar/>
+            <Navbar showHistory={true}/>
         <div className=' container mx-auto  p-2   min-h-screen '>
             <>
             {/*Data input*/}
